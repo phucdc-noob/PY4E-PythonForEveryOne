@@ -1,6 +1,5 @@
 import json
 import sqlite3
-import requests
 
 conn = sqlite3.connect('rosterdb.sqlite')
 cur = conn.cursor()
@@ -35,13 +34,13 @@ if len(fname) < 1:
 
 # [
 #   [ "Charley", "si110", 1 ],
-#   [ "Mea", "si110", 0 ],
+#   [ "Mea", "si110", 0 ],...
+#]
 
 str_data = open(fname).read()
 json_data = json.loads(str_data)
 
 for entry in json_data:
-
     name = entry[0]
     title = entry[1]
     role = entry[2]
@@ -61,3 +60,4 @@ for entry in json_data:
         ( user_id, course_id, role ) )
 
     conn.commit()
+    conn.close()
