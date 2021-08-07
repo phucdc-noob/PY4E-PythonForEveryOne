@@ -1,5 +1,5 @@
-from enum import unique
-import re
+# This file contain many function that solve some problem about duplicate characters in string
+
 
 # Find and remove duplicate of characters in string
 # aabbcc -> abc
