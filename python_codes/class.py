@@ -6,13 +6,12 @@ class Student:
 
 # Main
 students = []
-cnt = 3
-while cnt > 0:
-    name = input("Enter name: ")
-    age = int(input("Enter age: "))
-    testScore = float(input("Enter test score: "))
-    students.append( Student(name, age, testScore)) 
-    cnt-=1
+
+# Create students
+students.append(Student('Phuc', 21, 3.2))
+students.append(Student('Huy', 21, 8.0))
+students.append(Student('Nam', 21, 6.7))
+students.append(Student('Phuc', 21, 2.6))
 
 print("List students before sorting:\n%5s %5s %5s %5s %5s" % ("Name", "|", "Age", "|", "Test score"))
 for student in students:
@@ -32,28 +31,24 @@ for student in students:
 
 # example:
 '''
-Enter name: Phuc
-Enter age: 21
-Enter test score: 3.2
-Enter name: Phuc
-Enter age: 21
-Enter test score: 2.6
-Enter name: Hoang
-Enter age: 21
-Enter test score: 8.0
 List students before sorting:
  Name     |   Age     | Test score
  Phuc     |    21     |   3.2
+  Huy     |    21     |   8.0
+  Nam     |    21     |   6.7
  Phuc     |    21     |   2.6
-Hoang     |    21     |   8.0
+
 List students after sorting by name:
  Name     |   Age     | Test score
-Hoang     |    21     |   8.0
+  Huy     |    21     |   8.0
+  Nam     |    21     |   6.7
  Phuc     |    21     |   3.2
  Phuc     |    21     |   2.6
+
 List students after sorting by name and test score:
  Name     |   Age     | Test score
-Hoang     |    21     |   8.0
+  Huy     |    21     |   8.0
+  Nam     |    21     |   6.7
  Phuc     |    21     |   2.6
  Phuc     |    21     |   3.2
 '''
