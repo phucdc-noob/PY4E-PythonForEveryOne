@@ -1,5 +1,4 @@
 import socket
-import re
 
 mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #connect to host (server) port 80 is for HTTP, 443 for HTTPS in default
