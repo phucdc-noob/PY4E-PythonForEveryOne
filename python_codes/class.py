@@ -29,6 +29,12 @@ students.sort(key = lambda x: (x.name, x.testScore))
 for student in students:
     print( "%5s %5s %5d %5s %5.1f" % (student.name, "|", student.age, "|", student.testScore) )
 
+# sort by name and test score, but in descending
+print("List students after sorting by name and test score in descending order:\n%5s %5s %5s %5s %5s" % ("Name", "|", "Age", "|", "Test score"))
+students.sort(key = lambda x: (x.name, x.testScore), reverse = True)
+for student in students:
+    print( "%5s %5s %5d %5s %5.1f" % (student.name, "|", student.age, "|", student.testScore) )
+
 # example:
 '''
 List students before sorting:
@@ -51,4 +57,11 @@ List students after sorting by name and test score:
   Nam     |    21     |   6.7
  Phuc     |    21     |   2.6
  Phuc     |    21     |   3.2
+
+List students after sorting by name and test score in descending order:
+ Name     |   Age     | Test score
+ Phuc     |    21     |   3.2
+ Phuc     |    21     |   2.6
+  Nam     |    21     |   6.7
+  Huy     |    21     |   8.0
 '''
