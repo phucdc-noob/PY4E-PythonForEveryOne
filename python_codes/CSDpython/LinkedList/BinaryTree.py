@@ -118,15 +118,27 @@ class BinaryTree:
         return result
    
     # real nightmare, delete by copying and delete by merging
+    '''
     
-
+    '''
 
 bt = BinaryTree()
-bt.insert(Node(3))
-bt.insert(Node(2))
-bt.insert(Node(1))
-bt.insert(Node(5))
+bt.insert(Node(8))
 bt.insert(Node(4))
+bt.insert(Node(12))
+bt.insert(Node(2))
 bt.insert(Node(6))
+bt.insert(Node(10))
+bt.insert(Node(14))
+bt.insert(Node(1))
+bt.insert(Node(3))
+bt.insert(Node(5))
 bt.insert(Node(7))
+bt.insert(Node(9))
+bt.insert(Node(11))
+bt.insert(Node(13))
+bt.insert(Node(15))
+
+bt.breadthFirstSearch()
+
 print(*bt.breadthFirstSearch(), sep = ', ')
