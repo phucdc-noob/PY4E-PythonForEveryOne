@@ -118,27 +118,185 @@ class BinaryTree:
         return result
    
     # real nightmare, delete by copying and delete by merging
-    '''
+    def deleteByCopy(self, key):
+        p = self.search(key)
+        if p is None:
+            return
+        f = None
+        cur = self.root
+        # find father of cur (f)
+        while p.key != cur.key:
+            f = cur
+            if cur.key > p.key:
+                cur = cur.left
+            else: 
+                cur = cur.right
+        # if p has no child
+        if p.left is None and p.right is None:
+            if f is None:
+                self.root = None
+            elif f.left == p:
+                f.left = None
+            else:
+                f.right = None
+        # if p has left child only
+        elif p.left is not None and p.right is None:
+            if f is None:
+                root = p.left
+            elif f.left == p:
+                f.left = p.left
+            else:
+                f.right = p.left
+        # if p has right child only
+        elif p.left is not None and p.right is None:
+            if f is None:
+                root = p.right
+            elif f.left == p:
+                f.left = p.right
+            else:
+                f.right = p.right
+        # if p has both child
+        elif p.left is not None and p.right is not None:
+            cur = p.left
+            f = None
+            # get the lastest right child of left child of p
+            while cur.right is not None:
+                f = cur
+                cur = cur.right
+            # delete node p 
+            p.key = cur.key
+            if f is None:
+                p.left = cur.left
+            else:
+                f.right = cur.left
+    
+    def deleteByMerging(self, key):
+        p = self.search(key)
+        if p is None:
+            return
+        # find f - father of node p
+        f = None
+        cur = self.root
+        while cur.key != p.key:
+            f = cur
+            if cur.key > p.key:
+                cur = cur.left
+            else:
+                cur = cur.right
+        # p has no child
+        if p.left is None and p.right is None:
+            if f is None:
+                self.root = None
+            elif f.left == p:
+                f.left = None
+            else:
+                f.right = None
+        
+        # p has left child only
+        if p.left is not None and p.right is None:
+            if f is None:
+                root = p.left
+            elif f.left == p:
+                f.left = p.left
+            else:
+                f.right = p.left
+
+        # p has right child only
+        if p.left is None and p.right is not None: 
+            if f is None:
+                root = p.left
+            elif f.left == p:
+                f.left = p.right
+            else:
+                f.right = p.right
+
+        # p has both child
+        elif p.left is not None and p.right is not None:
+            cur = p.left
+            # get the lastest right child of left child of node p
+            while cur.right is not None:
+                cur = cur.right
+            # get the right sub-tree's root of node p
+            rp = p.right
+            cur.right = rp
+            if f is None:
+                root = p.left
+            elif f.left == p:
+                f.left = p.left
+            else:
+                f.right = p.left
     
     '''
+        Convert binary tree to balanced binary tree:
+        1. inorder tranversal all nodes, store them to a list, so we get a sorted list in ascending
+        2. get the middle element of list we got, make it as root of new tree
+        3. recursively do the same as 2. for left and right:
+            3.1. Get the middle of left half and make it as left child of the root created in step 2.
+            3.2. Get the middle of right half and make it as right child of the root created in step 2.
+    '''
+    # step 1.
 
-bt = BinaryTree()
-bt.insert(Node(8))
-bt.insert(Node(4))
-bt.insert(Node(12))
-bt.insert(Node(2))
-bt.insert(Node(6))
-bt.insert(Node(10))
-bt.insert(Node(14))
-bt.insert(Node(1))
-bt.insert(Node(3))
-bt.insert(Node(5))
-bt.insert(Node(7))
-bt.insert(Node(9))
-bt.insert(Node(11))
-bt.insert(Node(13))
-bt.insert(Node(15))
+    def toList(self, root, arr):
+        if not root:
+            return
+        self.toList(root.left, arr)
+        arr.append(root)
+        self.toList(root.right, arr)
 
-bt.breadthFirstSearch()
+    # step 2. and 3.
+    def toBalance(self, arr, start, end):
+        if start > end:
+            return None
+        mid = (start+end) // 2
+        node = arr[mid]
+        node.left = self.toBalance(arr, start, mid-1)
+        node.right = self.toBalance(arr, mid+1, end)
+        return node
 
-print(*bt.breadthFirstSearch(), sep = ', ')
+    def balance(self, root):
+        arr = []
+        # step 1.
+        self.toList(root, arr)
+        n = len(arr)
+        # step 2. and 3.
+        return self.toBalance(arr, 0, n-1)
+
+    # rotate left
+    def rotateLeft(self, root):
+        if root.right is None:
+            return root
+        p = root.right
+        root.right = p.left
+        p.left = root
+        return p
+    
+    # rotate right
+    def rotateRight(self, root):
+        if root.left is None:
+            return root
+        p = root.left
+        root.left = p.right
+        p.right = p
+        return p
+
+if __name__ == '__main__':
+    bt = BinaryTree()
+    # insert 
+    bt.insert(Node(3))
+    bt.insert(Node(2))
+    bt.insert(Node(5))
+    bt.insert(Node(1))
+    bt.insert(Node(4))
+    bt.insert(Node(6))
+    bt.insert(Node(7))
+    
+    # Depth first tranversals
+    print('In Order: ')
+    bt.inOrder(bt.root)
+    print('\nPre Order: ')
+    bt.preOrder(bt.root)
+    print('\nPost Order: ')
+    bt.postOrder(bt.root)
+    
+    # breadth first tranversal
+    print('\nBread first tranversal:', *bt.breadthFirstSearch(), sep = " ")
