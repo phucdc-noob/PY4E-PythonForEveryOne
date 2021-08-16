@@ -204,7 +204,7 @@ class BinaryTree:
         # p has right child only
         if p.left is None and p.right is not None: 
             if f is None:
-                root = p.left
+                root = p.right
             elif f.left == p:
                 f.left = p.right
             else:
