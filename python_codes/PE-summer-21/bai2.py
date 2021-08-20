@@ -10,16 +10,11 @@ locations = {}
 # add new key with value in dict:
 #       dict[new_key] = value_of_new_key
 
-while True:
-    filename = input('Enter file: ') # string
-    if not filename:
-        filename = 'DNSList.txt'
-    try: 
-        inFile = open(filename, 'r') # cursor
-        lines = inFile.readlines() # ['dong 1', 'dong2', ... , 'dong n']
-        break
-    except:
-        print('File not found. Please check.')
+filename = input('Enter file: ') # string
+if not filename:
+    filename = 'DNSList.txt'
+    inFile = open(filename, 'r') # cursor
+    lines = inFile.readlines() # ['dong 1', 'dong2', ... , 'dong n']
 
 for line in lines:
     fields = re.split('\s+', line) # \s = 1 space; field = ['<:', '']
