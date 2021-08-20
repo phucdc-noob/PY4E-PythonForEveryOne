@@ -13,8 +13,8 @@ locations = {}
 filename = input('Enter file: ') # string
 if not filename:
     filename = 'DNSList.txt'
-    inFile = open(filename, 'r') # cursor
-    lines = inFile.readlines() # ['dong 1', 'dong2', ... , 'dong n']
+inFile = open(filename, 'r') # cursor
+lines = inFile.readlines() # ['dong 1', 'dong2', ... , 'dong n']
 
 for line in lines:
     fields = re.split('\s+', line) # \s = 1 space; field = ['<:', '']
