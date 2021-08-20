@@ -2,8 +2,12 @@ import re
 import sqlite3
 
 # connect to DNSList.txt
-inFile = open('DNSList.txt', 'r')  # r read, w write, a append
-lines = inFile.readlines()
+try:
+    inFile = open('DNSList.txt', 'r')  # r read, w write, a append
+    lines = inFile.readlines()
+except:
+    print('File DNSList.txt not found!')
+    exit(-1)
 
 # connect to database
 conn = sqlite3.connect('DNSList.sqlite')
@@ -21,9 +25,7 @@ conn.executescript(
     '''
 )
 
-ip = None
-reli = None
-des = None
+ip = reli = des = None
 # read DNSList.txt line by line
 for line in lines:
     # split line into many fields
@@ -31,7 +33,7 @@ for line in lines:
     if inputs[0] == 'IP':
         ip = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', inputs[2])[0]
     elif inputs[0] == 'Reliability:':
-        reli = int(inputs[1][:len(inputs[1]) - 1])
+        reli = int(re.search(r'\d{1,3}', inputs[1])[0])
         if reli >= 50:
             des = 'Normal'
         else:

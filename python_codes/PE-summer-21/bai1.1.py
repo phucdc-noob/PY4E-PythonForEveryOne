@@ -22,7 +22,7 @@ if __name__ == '__main__':
     num = checkInput()
     if num < 6:
         print('There is no perfect number from 0 to %d' % (num))
-    else: 
-        for i in range(6, num + 1):
+    else:
+        for i in range(6, num + 1): # [6, num + 1) <=> [6, num]
             if isPerfect(i):
-                print(i, end = " ")
+                print(i, end = " ") # end = "\n", sep = "\n"
