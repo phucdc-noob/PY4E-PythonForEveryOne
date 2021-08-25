@@ -7,6 +7,7 @@ if __name__ == '__main__':
         lines = inFile.readlines()
     except (FileNotFoundError, IOError):
         print('File not found or unreadable.')
+        exit(-1)
     
     conn = sqlite3.connect('Trace.sqlite')
     # Name is unique

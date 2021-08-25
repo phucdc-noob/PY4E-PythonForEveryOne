@@ -3,10 +3,10 @@ import sqlite3
 
 # connect to DNSList.txt
 try:
-    inFile = open('DNSList.txt', 'r')  # r read, w write, a append
+    inFile = open('DNSList.txt', 'r')
     lines = inFile.readlines()
-except:
-    print('File DNSList.txt not found!')
+except (FileNotFoundError, IOError):
+    print('File not found or unreadable.')
     exit(-1)
 
 # connect to database

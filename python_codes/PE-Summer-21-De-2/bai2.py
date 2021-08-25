@@ -3,7 +3,10 @@ import re
 def getLines():
     while True:
         try:
-            inFile = open('Trace.txt', 'r')
+            filename = input('Enter file: ')
+            if not filename:
+                filename = 'Trace.txt'
+            inFile = open(filename, 'r')
             lines = inFile.readlines()
             inFile.close()
             return lines
