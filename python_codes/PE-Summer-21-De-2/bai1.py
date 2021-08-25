@@ -27,4 +27,5 @@ if __name__ == '__main__':
     if num < 2:
         print('There is no prime number from 0 to %d' % (num))
     else:
+        print('The prime numbers from 0 to %d:' % (num))
         print(*prime(num), sep = " ")
