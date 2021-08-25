@@ -1,18 +1,13 @@
 import sqlite3
 import re
 
-def getLines():
-    while True:
-        try:
-            inFile = open('Trace.txt', 'r')
-            lines = inFile.readlines()
-            inFile.close()
-            return lines
-        except (FileNotFoundError, IOError):
-            print('File not found or unreadable.')
-
 if __name__ == '__main__':
-    lines = getLines()
+    try:
+        inFile = open('Trace.txt', 'r')
+        lines = inFile.readlines()
+    except (FileNotFoundError, IOError):
+        print('File not found or unreadable.')
+    
     conn = sqlite3.connect('Trace.sqlite')
     # Name is unique
     # Drop table if exits
@@ -26,6 +21,7 @@ if __name__ == '__main__':
             );   
         '''
     )
+    
     troubleshot = {}
     for line in lines:
         fields = re.split(r'\s+', line)
@@ -35,6 +31,7 @@ if __name__ == '__main__':
                 troubleshot[provider] = 1
             else:
                 troubleshot[provider] += 1
+    
     for provider in troubleshot.keys():
         pwarning = ''
         if troubleshot[provider] > 1:
@@ -43,9 +40,12 @@ if __name__ == '__main__':
             pwarning = 'Normal'
         conn.execute('insert into providers values (?, ?, ?);', (provider, troubleshot[provider], pwarning))
     conn.commit()
+    
     tables = conn.execute('select * from providers order by pcount desc;')
     print('Troubleshot wired LAN related issues:')
     print('%10s %5s %10s' % ('Provider', 'Count', 'Warning'))
+    
     for row in tables:
         print('%10s %5d %10s' % (row[0], row[1], row[2]))
     conn.close()
+    inFile.close()
