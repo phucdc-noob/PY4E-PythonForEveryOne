@@ -6,8 +6,8 @@ def getLines():
             filename = input('Enter file: ')
             if not filename:
                 filename = 'Trace.txt'
-            inFile = open(filename, 'r')
-            lines = inFile.readlines()
+            inFile = open(filename, 'r') # cursor
+            lines = inFile.readlines() # [dong1, dong2, ..., dong n]
             inFile.close()
             return lines
         except (FileNotFoundError, IOError):
@@ -15,6 +15,15 @@ def getLines():
 
 if __name__ == '__main__':
     troubleshot = {}
+    # dictionary
+    # dict = {key1:value1, key2:value2, ... keyn:valuen}
+    '''
+    name = microsoft
+    name not in dict -> dict[name] = 1
+    ...
+    name = microsoft
+    name in dict -> dict[name] += 1
+    '''
     lines = getLines()
     for line in lines:
         fields = re.split(r'\s+', line)

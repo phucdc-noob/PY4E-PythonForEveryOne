@@ -26,4 +26,4 @@ if __name__ == '__main__':
         print('The perfect numbers from 0 to %d:' % (num))
         for i in range(6, num + 1): # [6, num + 1) <=> [6, num]
             if isPerfect(i):
-                print(i, end = " ") # end = "\n", sep = "\n"
+                print(i, end = ' ') # end = "\n", sep = "\n"

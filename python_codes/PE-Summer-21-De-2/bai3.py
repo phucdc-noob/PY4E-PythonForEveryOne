@@ -9,7 +9,7 @@ if __name__ == '__main__':
         print('File not found or unreadable.')
         exit(-1)
     
-    conn = sqlite3.connect('Trace.sqlite')
+    conn = sqlite3.connect('Trace.sqlite') # cursor
     # Name is unique
     # Drop table if exits
     conn.executescript(
@@ -43,6 +43,7 @@ if __name__ == '__main__':
     conn.commit()
     
     tables = conn.execute('select * from providers order by pcount desc;')
+    # [[col1, col2, col3],[]]
     print('Troubleshot wired LAN related issues:')
     print('%10s %5s %10s' % ('Provider', 'Count', 'Warning'))
     
