@@ -25,5 +25,6 @@ for line in lines:
         courses[course] += 1
 
 print('Course summary:')
+print('%10s %10s' % ('Course', 'Count'))
 for course in sorted(courses.keys()):
-    print(course, courses[course])
+    print('%10s %10d' % (course, courses[course]))

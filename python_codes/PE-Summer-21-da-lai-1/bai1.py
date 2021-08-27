@@ -1,3 +1,5 @@
+# 0 1 1 2 3 5 8 ....
+
 def fibonacci(n):
     result = [0] * (n + 1)
     result[1] = 1
