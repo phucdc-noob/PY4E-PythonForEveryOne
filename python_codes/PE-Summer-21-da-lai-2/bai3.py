@@ -41,6 +41,6 @@ for line in lines:
 conn.commit()
 tables = conn.execute('select * from MovieList order by length desc;')
 print('Movie list:')
-print('%10s %5s %10s' % ('MovieID', 'Length', 'Description'))
+print('%10s %10s %10s' % ('MovieID', 'Length', 'Description'))
 for row in tables:
-    print('%10s %5d %10s' % (row[0], row[1], row[2]))
+    print('%10s %10d %10s' % (row[0], row[1], row[2]))

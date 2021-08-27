@@ -12,10 +12,10 @@ def checkInput():
 
 num = checkInput()
 if num < 8:
-    print('There is no perfect cube number from 0 to %d' % (num))
+    print('There is no perfect cube number from 0 to %d:' % (num))
 else:
     i = 2
-    print('The perfect cubes from 0 to %d' % (num))
+    print('The perfect cubes from 0 to %d:' % (num))
     while (i**3 <= num):
         print(i**3, end = ' ')
         i += 1
