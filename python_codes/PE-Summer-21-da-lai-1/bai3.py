@@ -42,6 +42,6 @@ for line in lines:
 conn.commit()
 tables = conn.execute('select * from Student order by Grade desc;')
 print('Student list')
-print('Name\t\t\tCourse\t\tGrade\t\tDescription')
+print('%20s %10s %10s %10s' % ('Name', 'Course', 'Grade', 'Description'))
 for row in tables:
-    print('%s\t\t\t%s\t\t%d\t\t%s' % (row[0], row[1], row[2], row[3]))
+    print('%20s %10s %10d %10s' % (row[0], row[1], row[2], row[3]))
