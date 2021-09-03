@@ -21,4 +21,4 @@ for line in lines:
         s += float(re.split(r'\s+', line)[1])
         cnt += 1
 
-print('Average spam confidence: %.17g' % (s/cnt))
+print('Average spam confidence: %.17f' % (s/cnt))
