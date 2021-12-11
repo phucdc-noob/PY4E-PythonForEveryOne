@@ -1,51 +1,34 @@
-import re
 import sqlite3
+import re
 
-# connect to DNSList.txt
-try:
-    inFile = open('DNSList.txt', 'r')
-    lines = inFile.readlines()
-except (FileNotFoundError, IOError):
-    print('File not found or unreadable.')
-    exit(-1)
+with sqlite3.connect('data.sqlite') as cur, open('data.txt', 'r') as f:
+    cur.executescript(
+        '''
+            drop table if exists DNS;
+            create table DNS (
+                ip not null primary key unique,
+                reliability integer,
+                description not null
+            );
+        '''
+    )
 
-# connect to database
-conn = sqlite3.connect('DNSList.sqlite')
-# drop table if exists and create new one instead
-# IP must be unique
-conn.executescript(
-    '''
-    drop table if exists DNS;
+    lines = f.readlines()
     
-    create TABLE DNS (
-        IP not null primary key unique,
-        Reliability INTEGER,
-        Description not null
-    );
-    '''
-)
+    for line in lines:
+        if 'IP' in line:
+            ip = re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', line)[0]
+        if 'Reli' in line:
+            reli = int(re.search(r'[0-9]+', line)[0])
+            if reli >= 50:
+                des = 'Normal'
+            else:
+                des = 'Low'
+            cur.execute('insert into DNS values (?, ?, ?)', (ip, reli, des))
+    cur.commit()
 
-ip = reli = des = None
-# read DNSList.txt line by line
-for line in lines:
-    # split line into many fields
-    inputs = re.split('\s+', line)
-    if inputs[0] == 'IP':
-        ip = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', inputs[2])[0]
-    elif inputs[0] == 'Reliability:':
-        reli = int(re.search(r'\d{1,3}', inputs[1])[0])
-        if reli >= 50:
-            des = 'Normal'
-        else:
-            des = 'Low'
-        conn.execute('insert into DNS values (?, ?, ?)', (ip, reli, des))
-conn.commit()
-
-table = conn.execute("SELECT * FROM DNS ORDER BY Reliability DESC")
-print('DNS server list:')
-print('IP\t\tReliability\tDescription')
-for row in table:
-    print(*row, sep='\t\t')
-# close the connections
-conn.close()
-inFile.close()
+    table = cur.execute('select * from DNS order by reliability desc')
+    print('DNS server list:')
+    print('IP'.ljust(20, ' ') + 'Reliability'.ljust(15, ' ') + 'Description'.ljust(11, ' '))
+    for row in table:
+        print(row[0].ljust(20, ' ') + str(row[1]).ljust(15, ' ') + row[2].ljust(11, ' '))
