@@ -2,19 +2,19 @@ import sqlite3
 import re
 
 try:
-    cur = sqlite3.connect('data.sqlite')
+    cur = sqlite3.connect('DNSList.sqlite')
     cur.executescript(
         '''
             drop table if exists DNS;
             create table DNS (
-                ip not null primary key unique,
-                reliability integer,
-                description not null
+                IP not null primary key unique,
+                Reliability integer,
+                Description not null
             );
         '''
     )
 
-    f = open('data.txt', 'r')
+    f = open('DNSList.txt', 'r')
     lines = f.readlines()
 
     for line in lines:
@@ -29,7 +29,7 @@ try:
             cur.execute('insert into DNS values (?, ?, ?)', (ip, reli, des))
     cur.commit()
 
-    table = cur.execute('select * from DNS order by reliability desc')
+    table = cur.execute('select * from DNS order by Reliability desc')
     print('DNS server list:')
     print('IP'.ljust(20, ' ') + 'Reliability'.ljust(15, ' ') + 'Description'.ljust(11, ' '))
     for row in table:
