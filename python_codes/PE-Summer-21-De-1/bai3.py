@@ -1,7 +1,8 @@
 import sqlite3
 import re
 
-with sqlite3.connect('data.sqlite') as cur, open('data.txt', 'r') as f:
+try:
+    cur = sqlite3.connect('data.sqlite')
     cur.executescript(
         '''
             drop table if exists DNS;
@@ -13,8 +14,9 @@ with sqlite3.connect('data.sqlite') as cur, open('data.txt', 'r') as f:
         '''
     )
 
+    f = open('data.txt', 'r')
     lines = f.readlines()
-    
+
     for line in lines:
         if 'IP' in line:
             ip = re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', line)[0]
@@ -32,3 +34,9 @@ with sqlite3.connect('data.sqlite') as cur, open('data.txt', 'r') as f:
     print('IP'.ljust(20, ' ') + 'Reliability'.ljust(15, ' ') + 'Description'.ljust(11, ' '))
     for row in table:
         print(row[0].ljust(20, ' ') + str(row[1]).ljust(15, ' ') + row[2].ljust(11, ' '))
+
+    f.close()
+    cur.close()
+
+except Exception as e:
+    print(e)
