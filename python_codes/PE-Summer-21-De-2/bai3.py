@@ -1,18 +1,9 @@
 import sqlite3
 import re
 
-if __name__ == '__main__':
-    try:
-        inFile = open('Trace.txt', 'r')
-        lines = inFile.readlines()
-    except (FileNotFoundError, IOError):
-        print('File not found or unreadable.')
-        exit(-1)
-    
-    conn = sqlite3.connect('Trace.sqlite') # cursor
-    # Name is unique
-    # Drop table if exits
-    conn.executescript(
+try:
+    cur = sqlite3.connect('Trace.sqlite')
+    cur.executescript(
         '''
             drop table if exists providers;
             create table providers(
@@ -22,32 +13,36 @@ if __name__ == '__main__':
             );   
         '''
     )
-    
-    troubleshot = {}
+
+    f = open('Trace.txt', 'r')
+    lines = f.readlines()
+
+    traces = {}
+
     for line in lines:
-        fields = re.split(r'\s+', line)
-        if fields[0] == 'Name:':
-            provider = fields[1].split('-')[0]
-            if provider not in troubleshot:
-                troubleshot[provider] = 1
+        if 'Name' in line:
+            provider = re.search(r'(?<=\s)(\w+?)(?=\-)', line)[0]
+            if provider not in traces:
+                traces[provider] = 1
             else:
-                troubleshot[provider] += 1
+                traces[provider] += 1
     
-    for provider in troubleshot.keys():
-        pwarning = ''
-        if troubleshot[provider] > 1:
+    for provider in traces:
+        if traces[provider] > 1:
             pwarning = 'High risk'
         else:
             pwarning = 'Normal'
-        conn.execute('insert into providers values (?, ?, ?);', (provider, troubleshot[provider], pwarning))
-    conn.commit()
-    
-    tables = conn.execute('select * from providers order by pcount desc;')
-    # [[col1, col2, col3],[]]
+        cur.execute('insert into providers values (?, ?, ?)', (provider, traces[provider], pwarning))
+    cur.commit()
+
+    table = cur.execute('select * from providers order by pcount desc')
     print('Troubleshot wired LAN related issues:')
-    print('%10s %5s %10s' % ('Provider', 'Count', 'Warning'))
-    
-    for row in tables:
-        print('%10s %5d %10s' % (row[0], row[1], row[2]))
-    conn.close()
-    inFile.close()
+    print('Provider'.ljust(15, ' ') + 'Count'.ljust(10, ' ') + 'Warning'.ljust(11, ' '))
+    for row in table:
+        print(row[0].ljust(15, ' ') + str(row[1]).ljust(10, ' ') + row[2].ljust(11, ' '))
+
+    f.close()
+    cur.close()
+
+except Exception as e:
+    print(e)
